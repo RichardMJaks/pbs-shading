@@ -1,0 +1,438 @@
+[gd_scene load_steps=31 format=3 uid="uid://bk47vj1glfpu"]
+
+[ext_resource type="Script" uid="uid://bjwvwscu4xyu2" path="res://mirror_surface.gd" id="1_0xm2m"]
+[ext_resource type="Shader" uid="uid://jn78haj7eeyf" path="res://main.gdshader" id="2_h2yge"]
+[ext_resource type="Texture2D" uid="uid://trik3cs7jt4n" path="res://panorama/panorama.webp" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://b8mbsrlyf5cog" path="res://camera_3d.gd" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://bd4wobron184a" path="res://ball.gd" id="4_272bh"]
+[ext_resource type="Script" uid="uid://de3dhq3wcfnv1" path="res://var_sliders.gd" id="5_lquwl"]
+[ext_resource type="Script" uid="uid://cl5fcvhep5egc" path="res://slider_container.gd" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://cd2p7c0s6xbpm" path="res://color.gd" id="8_5vw27"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h2yge"]
+render_priority = 0
+shader = ExtResource("2_h2yge")
+shader_parameter/panorama_texture = ExtResource("3_h2yge")
+shader_parameter/light_dir = Vector3(0.513, -0.537, -0.67)
+shader_parameter/ambient_intensity = 1.0
+shader_parameter/ambient_color = Color(0.901522, 0.428717, 0.60298, 1)
+shader_parameter/roughness_factor = 0.9
+shader_parameter/metallic = 0.04
+shader_parameter/n1 = 0.5
+shader_parameter/m = 0.5
+shader_parameter/sigma = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_1bvp3"]
+material = SubResource("ShaderMaterial_h2yge")
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1bvp3"]
+panorama = ExtResource("3_h2yge")
+
+[sub_resource type="Sky" id="Sky_lquwl"]
+sky_material = SubResource("PanoramaSkyMaterial_1bvp3")
+
+[sub_resource type="Environment" id="Environment_7mycd"]
+background_mode = 2
+sky = SubResource("Sky_lquwl")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mycd"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5vw27"]
+
+[sub_resource type="Gradient" id="Gradient_272bh"]
+interpolation_mode = 1
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5vw27"]
+gradient = SubResource("Gradient_272bh")
+width = 20
+height = 20
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kek77"]
+bg_color = Color(0.215902, 0.215902, 0.215902, 1)
+border_color = Color(0, 0, 0, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4c57u"]
+bg_color = Color(0.533037, 0.533037, 0.533037, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efxa6"]
+bg_color = Color(0.72, 0.72, 0.72, 1)
+
+[sub_resource type="Gradient" id="Gradient_5vw27"]
+interpolation_mode = 1
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kek77"]
+gradient = SubResource("Gradient_5vw27")
+width = 20
+height = 20
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dg77c"]
+bg_color = Color(0.44, 0, 0, 1)
+corner_radius_top_left = 300
+corner_radius_top_right = 300
+corner_radius_bottom_right = 300
+corner_radius_bottom_left = 300
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycdy4"]
+bg_color = Color(1, 0, 0, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="Gradient" id="Gradient_w48qg"]
+interpolation_mode = 1
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vivmo"]
+gradient = SubResource("Gradient_w48qg")
+width = 20
+height = 20
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2cqfq"]
+bg_color = Color(0, 0.21, 0, 1)
+border_color = Color(0, 0, 0, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yaehf"]
+bg_color = Color(0, 1, 0, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_074og"]
+bg_color = Color(0, 0, 0.39, 1)
+border_color = Color(0, 0, 0, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cegan"]
+bg_color = Color(0, 0, 1, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[node name="Main" type="Node3D"]
+
+[node name="Mirror Surface" type="Node3D" parent="."]
+script = ExtResource("1_0xm2m")
+
+[node name="Ball" type="MeshInstance3D" parent="Mirror Surface"]
+unique_name_in_owner = true
+mesh = SubResource("SphereMesh_1bvp3")
+skeleton = NodePath("")
+script = ExtResource("4_272bh")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7mycd")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.780139, 0.358748, -0.512526, -0.0345499, 0.842703, 0.537269, 0.624652, -0.401437, 0.66982, -8.65959, 13.6178, 12.4819)
+light_bake_mode = 1
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.50039)
+script = ExtResource("4_1bvp3")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Controls" type="PanelContainer" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -558.0
+offset_top = -5.0
+offset_right = -225.0
+offset_bottom = 215.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7mycd")
+script = ExtResource("5_lquwl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Ambient" type="PanelContainer" parent="UI/Controls/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5vw27")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Controls/VBoxContainer/Ambient"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LeftMargin" type="Control" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer"]
+layout_mode = 2
+
+[node name="Ambient" type="VBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AmbientIntensity" type="HBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "ambient_intensity"
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientIntensity"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "ambient_intensity"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientIntensity"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="AmbientColor" type="VBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "ambient_color"
+
+[node name="Colors" type="HBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Sliders" type="VBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Red" type="HBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "ambient_color.r"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Red"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_kek77")
+theme_override_styles/slider = SubResource("StyleBoxFlat_dg77c")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_ycdy4")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="Green" type="HBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "ambient_color.g"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Green"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_vivmo")
+theme_override_styles/slider = SubResource("StyleBoxFlat_2cqfq")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_yaehf")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="Blue" type="HBoxContainer" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "ambient_color.b"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Blue"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_074og")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_cegan")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="ColorRect" type="ColorRect" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.194349, 0.194349, 0.194349, 1)
+script = ExtResource("8_5vw27")
+
+[node name="Control" type="Control" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors"]
+layout_mode = 2
+
+[node name="RightMargin" type="Control" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer"]
+layout_mode = 2
+
+[node name="Metallic" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "metallic"
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/Metallic"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "metallic"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/Metallic"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="n1" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "n1"
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/n1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "n1"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/n1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+min_value = 0.04
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="Roughness" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "roughness_factor"
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/Roughness"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "roughness"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/Roughness"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="m" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "m"
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/m"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "m"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/m"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="sigma" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "sigma"
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/sigma"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "σ"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/sigma"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientIntensity/HSlider" to="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientIntensity" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Red/HSlider" to="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Red" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Green/HSlider" to="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Green" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Blue/HSlider" to="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Blue" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/Metallic/HSlider" to="UI/Controls/VBoxContainer/Metallic" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/n1/HSlider" to="UI/Controls/VBoxContainer/n1" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/Roughness/HSlider" to="UI/Controls/VBoxContainer/Roughness" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/m/HSlider" to="UI/Controls/VBoxContainer/m" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/sigma/HSlider" to="UI/Controls/VBoxContainer/sigma" method="edit_property"]
