@@ -12,35 +12,52 @@ uniform float n1: hint_range(0.0, 1.0, 0.01) = 0.5;
 uniform float m: hint_range(0.0, 1.0, 0.01) = 0.5;
 uniform float sigma: hint_range(0.0, 1.5, 0.01) = 0.5;
 
-// ChatGPT generated code
-float G_SchlickGGX(float NdotX, float roughness) {
-    float k = (roughness * roughness) / 2.0;
-    return NdotX / (NdotX * (1.0 - k) + k);
+// Schlick's approximation for Fresnel Effect
+float fresnel(vec3 normal, vec3 v_x) {
+	float r0 = pow((1.0 - n1) / (1.0 + n1), 2.0);
+    float fresnel = r0 + (1.0 - r0) * pow(1.0 - max(dot(normal, v_x), 0), 5.0);
+
+	return fresnel;
 }
 
-// ChatGPT generated code
-float G_SmithGGX(vec3 n, vec3 v, vec3 l, float roughness) {
-    float NdotV = max(dot(n, v), 0.0);
-    float NdotL = max(dot(n, l), 0.0);
-    return G_SchlickGGX(NdotV, roughness) * G_SchlickGGX(NdotL, roughness);
-}
-
-
-vec3 oren_nayar(vec3 normal,vec3 view_dir, vec3 light, vec3 color ) {
+vec3 oren_nayar(vec3 normal,vec3 view_dir, vec3 light) {
+	// Variables
 	float L = max(0, dot(normal, light));
 	float V = max(0, dot(normal, view_dir));
 	float sigma_squared = pow(sigma, 2);
 	float A = 1.0 - 0.5 * (sigma_squared / (sigma_squared + 0.33));
 	float B = 0.45 * (sigma_squared / (sigma_squared + 0.09));
-	vec3 v_proj = normalize(view_dir - normal * V);
-	vec3 l_proj = normalize(light_dir - normal * L);
-	vec3 l_brdf = color / PI;
+
+	// Angles
 	float alpha = max(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
 	float beta = min(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
+
+	// Projections
+	vec3 v_proj = normalize(view_dir - normal * V);
+	vec3 l_proj = normalize(light_dir - normal * L);
 	float proj_dot = max(0, dot(v_proj, l_proj));
+
+	// Calculations
 	float calc = sqrt((1.0 - pow(L, 2) * (1.0 - pow(V, 2)))) / max(L, V);
-	vec3 oren_nayar = l_brdf * (A + B * proj_dot * calc);
+	vec3 oren_nayar = vec3(A + B * proj_dot * calc);
+
 	return oren_nayar;
+}
+
+// Formula given by ChatGPT
+float geometry_cook_torrance(vec3 normal, vec3 h, vec3 light, vec3 view_dir) {
+	// Dot products
+	float ndh = max(dot(normal, h), 0.0);
+	float ndv = max(dot(normal, view_dir), 0.0);
+	float ndl = max(dot(normal, light), 0.0);
+	float vdh = max(dot(view_dir, h), 0.0);
+
+	// Calculations (split up for easier reading)
+	float G_1 = (2.0 * ndh * ndv) / (vdh);
+	float G_2 = (2.0 * ndh * ndl) / vdh;
+	float G = min(1, min(G_1, G_2));
+
+	return G;
 }
 
 float cook_torrance(vec3 light, vec3 view_dir, vec3 normal, vec3 color) {
@@ -51,12 +68,11 @@ float cook_torrance(vec3 light, vec3 view_dir, vec3 normal, vec3 color) {
 	float D_2 = -pow(sqrt(1.0 - pow(ndh, 2)) / (ndh * m), 2);
 	float D = pow(D_1 * E, D_2);
 
-	// Fresnel
-	float r0 = pow((1.0 - n1) / (1.0 + n1), 2.0);
-    float fresnel = r0 + (1.0 - r0) * pow(1.0 - ndh, 5.0);
+	// Other terms
+    float fresnel = fresnel(normal, h);
+	float G = geometry_cook_torrance(normal, h, light, view_dir);
 
-	float G = G_SmithGGX(normal, view_dir, h, roughness_factor);
-
+	// Cook-Torrance calculation
 	float ct = (fresnel * D * G) / 4.0 * dot(normal, view_dir) * dot(normal, light);
 
 	return ct;
@@ -98,19 +114,18 @@ void fragment() {
     float specular = pow(max(dot(reflect_light, view_dir), 0.0), mix(32.0, 2.0, roughness));  // Specular highlight
 
     // **Fresnel-Schlick model**
-    float NdotV = max(dot(normal, view_dir), 0.0);
-	float r0 = pow((1.0 - n1) / (1.0 + n1), 2.0);
-    float fresnel = r0 + (1.0 - r0) * pow(1.0 - NdotV, 5.0); // Using metallic instead of R0
+	float fresnel = fresnel(normal, view_dir);
 
 	// Oren-Nayar diffuse
-	vec3 oren_nayar = oren_nayar(normal, view_dir, light, COLOR.rgb);
+	vec3 oren_nayar = oren_nayar(normal, view_dir, light);
 
+	// Cook-Torrance microfacets
 	float ct = cook_torrance(light, view_dir, normal, COLOR.rgb);
 
     // **Final color calculation**
     vec3 ambient_light = blurred_color * ambient_intensity;  // Ambient lighting
-    vec3 specular_light = vec3(ct);         // Specular reflection
-    vec3 diffuse_light = (1.0 - fresnel) * (1.0 - metallic) * oren_nayar * blurred_color;  // Diffuse reflection
+    vec3 specular_light = vec3(ct); // Specular reflection
+    vec3 diffuse_light = (1.0 - fresnel) * (1.0 - metallic) * oren_nayar * blurred_color; // Diffuse reflection
 
     vec3 final_color = ambient_light + specular_light + diffuse_light;
 
