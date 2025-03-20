@@ -12,6 +12,20 @@ uniform float n1: hint_range(0.0, 1.0, 0.01) = 0.5;
 uniform float m: hint_range(0.0, 1.0, 0.01) = 0.5;
 uniform float sigma: hint_range(0.0, 1.5, 0.01) = 0.5;
 
+// ChatGPT generated code
+float G_SchlickGGX(float NdotX, float roughness) {
+    float k = (roughness * roughness) / 2.0;
+    return NdotX / (NdotX * (1.0 - k) + k);
+}
+
+// ChatGPT generated code
+float G_SmithGGX(vec3 n, vec3 v, vec3 l, float roughness) {
+    float NdotV = max(dot(n, v), 0.0);
+    float NdotL = max(dot(n, l), 0.0);
+    return G_SchlickGGX(NdotV, roughness) * G_SchlickGGX(NdotL, roughness);
+}
+
+
 vec3 oren_nayar(vec3 normal,vec3 view_dir, vec3 light, vec3 color ) {
 	float L = max(0, dot(normal, light));
 	float V = max(0, dot(normal, view_dir));
@@ -29,22 +43,22 @@ vec3 oren_nayar(vec3 normal,vec3 view_dir, vec3 light, vec3 color ) {
 	return oren_nayar;
 }
 
-vec3 cook_torrance(vec3 light, vec3 view_dir, vec3 normal, vec3 color) {
+float cook_torrance(vec3 light, vec3 view_dir, vec3 normal, vec3 color) {
 	// Distribution term
 	vec3 h = normalize(light + view_dir);
-	float ndh = dot(normal, h);
+	float ndh = max(dot(normal, h), 0);
 	float D_1 = (1.0 / (pow(m, 2) * pow(ndh, 4)));
 	float D_2 = -pow(sqrt(1.0 - pow(ndh, 2)) / (ndh * m), 2);
 	float D = pow(D_1 * E, D_2);
-	
+
 	// Fresnel
 	float r0 = pow((1.0 - n1) / (1.0 + n1), 2.0);
-    float fresnel = r0 + (1.0 - r0) * pow(1.0 - dot(h, normal), 5.0);
-	
-	vec3 G = oren_nayar(h, view_dir, light, color);
-	
-	vec3 ct = (fresnel * D * G) / 4.0 * dot(normal, view_dir) * dot(normal, light);
-	
+    float fresnel = r0 + (1.0 - r0) * pow(1.0 - ndh, 5.0);
+
+	float G = G_SmithGGX(normal, view_dir, h, roughness_factor);
+
+	float ct = (fresnel * D * G) / 4.0 * dot(normal, view_dir) * dot(normal, light);
+
 	return ct;
 }
 
@@ -91,10 +105,11 @@ void fragment() {
 	// Oren-Nayar diffuse
 	vec3 oren_nayar = oren_nayar(normal, view_dir, light, COLOR.rgb);
 
-	vec3 ct = cook_torrance(light, view_dir, normal, COLOR.rgb);
+	float ct = cook_torrance(light, view_dir, normal, COLOR.rgb);
+
     // **Final color calculation**
     vec3 ambient_light = blurred_color * ambient_intensity;  // Ambient lighting
-    vec3 specular_light = ct;         // Specular reflection
+    vec3 specular_light = vec3(ct);         // Specular reflection
     vec3 diffuse_light = (1.0 - fresnel) * (1.0 - metallic) * oren_nayar * blurred_color;  // Diffuse reflection
 
     vec3 final_color = ambient_light + specular_light + diffuse_light;

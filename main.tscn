@@ -297,7 +297,7 @@ value = 0.5
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 4
-color = Color(0.194349, 0.194349, 0.194349, 1)
+color = Color(0.5, 0.5, 0.5, 1)
 script = ExtResource("8_5vw27")
 
 [node name="Control" type="Control" parent="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors"]
