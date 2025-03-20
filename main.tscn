@@ -330,31 +330,6 @@ max_value = 1.0
 step = 0.01
 value = 0.5
 
-[node name="n1" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("7_5vw27")
-property_name = "n1"
-
-[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/n1"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "n1"
-
-[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/n1"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
-theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
-theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
-theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
-min_value = 0.04
-max_value = 1.0
-step = 0.01
-value = 0.5
-
 [node name="Roughness" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -379,6 +354,31 @@ max_value = 1.0
 step = 0.01
 value = 0.5
 
+[node name="n1" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_5vw27")
+property_name = "n1"
+
+[node name="Label" type="Label" parent="UI/Controls/VBoxContainer/n1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "n1 (schlick)"
+
+[node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/n1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = SubResource("GradientTexture2D_5vw27")
+theme_override_styles/slider = SubResource("StyleBoxFlat_kek77")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_4c57u")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_efxa6")
+min_value = 0.04
+max_value = 1.0
+step = 0.01
+value = 0.5
+
 [node name="m" type="HBoxContainer" parent="UI/Controls/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -389,7 +389,7 @@ property_name = "m"
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
-text = "m"
+text = "m (cook-torrance)"
 
 [node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/m"]
 layout_mode = 2
@@ -413,7 +413,7 @@ property_name = "sigma"
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
-text = "σ"
+text = "σ (oren-nayar)"
 
 [node name="HSlider" type="HSlider" parent="UI/Controls/VBoxContainer/sigma"]
 layout_mode = 2
@@ -432,7 +432,7 @@ value = 0.5
 [connection signal="value_changed" from="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Green/HSlider" to="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Green" method="edit_property"]
 [connection signal="value_changed" from="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Blue/HSlider" to="UI/Controls/VBoxContainer/Ambient/HBoxContainer/Ambient/AmbientColor/Colors/Sliders/Blue" method="edit_property"]
 [connection signal="value_changed" from="UI/Controls/VBoxContainer/Metallic/HSlider" to="UI/Controls/VBoxContainer/Metallic" method="edit_property"]
-[connection signal="value_changed" from="UI/Controls/VBoxContainer/n1/HSlider" to="UI/Controls/VBoxContainer/n1" method="edit_property"]
 [connection signal="value_changed" from="UI/Controls/VBoxContainer/Roughness/HSlider" to="UI/Controls/VBoxContainer/Roughness" method="edit_property"]
+[connection signal="value_changed" from="UI/Controls/VBoxContainer/n1/HSlider" to="UI/Controls/VBoxContainer/n1" method="edit_property"]
 [connection signal="value_changed" from="UI/Controls/VBoxContainer/m/HSlider" to="UI/Controls/VBoxContainer/m" method="edit_property"]
 [connection signal="value_changed" from="UI/Controls/VBoxContainer/sigma/HSlider" to="UI/Controls/VBoxContainer/sigma" method="edit_property"]

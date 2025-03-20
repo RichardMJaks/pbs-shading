@@ -12,6 +12,42 @@ uniform float n1: hint_range(0.0, 1.0, 0.01) = 0.5;
 uniform float m: hint_range(0.0, 1.0, 0.01) = 0.5;
 uniform float sigma: hint_range(0.0, 1.5, 0.01) = 0.5;
 
+vec3 oren_nayar(vec3 normal,vec3 view_dir, vec3 light, vec3 color ) {
+	float L = max(0, dot(normal, light));
+	float V = max(0, dot(normal, view_dir));
+	float sigma_squared = pow(sigma, 2);
+	float A = 1.0 - 0.5 * (sigma_squared / (sigma_squared + 0.33));
+	float B = 0.45 * (sigma_squared / (sigma_squared + 0.09));
+	vec3 v_proj = normalize(view_dir - normal * V);
+	vec3 l_proj = normalize(light_dir - normal * L);
+	vec3 l_brdf = color / PI;
+	float alpha = max(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
+	float beta = min(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
+	float proj_dot = max(0, dot(v_proj, l_proj));
+	float calc = sqrt((1.0 - pow(L, 2) * (1.0 - pow(V, 2)))) / max(L, V);
+	vec3 oren_nayar = l_brdf * (A + B * proj_dot * calc);
+	return oren_nayar;
+}
+
+vec3 cook_torrance(vec3 light, vec3 view_dir, vec3 normal, vec3 color) {
+	// Distribution term
+	vec3 h = normalize(light + view_dir);
+	float ndh = dot(normal, h);
+	float D_1 = (1.0 / (pow(m, 2) * pow(ndh, 4)));
+	float D_2 = -pow(sqrt(1.0 - pow(ndh, 2)) / (ndh * m), 2);
+	float D = pow(D_1 * E, D_2);
+	
+	// Fresnel
+	float r0 = pow((1.0 - n1) / (1.0 + n1), 2.0);
+    float fresnel = r0 + (1.0 - r0) * pow(1.0 - dot(h, normal), 5.0);
+	
+	vec3 G = oren_nayar(h, view_dir, light, color);
+	
+	vec3 ct = (fresnel * D * G) / 4.0 * dot(normal, view_dir) * dot(normal, light);
+	
+	return ct;
+}
+
 void fragment() {
     // Get the normal in world space
     vec3 normal = normalize((INV_VIEW_MATRIX * vec4(-NORMAL, 0.0)).xyz);
@@ -53,23 +89,12 @@ void fragment() {
     float fresnel = r0 + (1.0 - r0) * pow(1.0 - NdotV, 5.0); // Using metallic instead of R0
 
 	// Oren-Nayar diffuse
-	float L = max(0, dot(normal, light_dir));
-	float V = max(0, dot(normal, view_dir));
-	float sigma_squared = pow(sigma, 2);
-	float A = 1.0 - 0.5 * (sigma_squared / (sigma_squared + 0.33));
-	float B = 0.45 * (sigma_squared / (sigma_squared + 0.09));
-	vec3 v_proj = normalize(view_dir - normal * V);
-	vec3 l_proj = normalize(light_dir - normal * L);
-	vec3 l_brdf = COLOR.rgb / PI;
-	float alpha = max(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
-	float beta = min(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
-	float proj_dot = max(0, dot(v_proj, l_proj));
-	float calc = sqrt((1.0 - pow(L, 2) * (1.0 - pow(V, 2)))) / max(L, V);
-	vec3 oren_nayar = l_brdf * (A + B * proj_dot * calc);
+	vec3 oren_nayar = oren_nayar(normal, view_dir, light, COLOR.rgb);
 
+	vec3 ct = cook_torrance(light, view_dir, normal, COLOR.rgb);
     // **Final color calculation**
     vec3 ambient_light = blurred_color * ambient_intensity;  // Ambient lighting
-    vec3 specular_light = vec3(fresnel) * specular;         // Specular reflection
+    vec3 specular_light = ct;         // Specular reflection
     vec3 diffuse_light = (1.0 - fresnel) * (1.0 - metallic) * oren_nayar * blurred_color;  // Diffuse reflection
 
     vec3 final_color = ambient_light + specular_light + diffuse_light;
@@ -77,3 +102,4 @@ void fragment() {
     // Set pixel color
     ALBEDO = final_color;
 }
+
