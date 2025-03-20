@@ -52,10 +52,25 @@ void fragment() {
 	float r0 = pow((1.0 - n1) / (1.0 + n1), 2.0);
     float fresnel = r0 + (1.0 - r0) * pow(1.0 - NdotV, 5.0); // Using metallic instead of R0
 
+	// Oren-Nayar diffuse
+	float L = max(0, dot(normal, light_dir));
+	float V = max(0, dot(normal, view_dir));
+	float sigma_squared = pow(sigma, 2);
+	float A = 1.0 - 0.5 * (sigma_squared / (sigma_squared + 0.33));
+	float B = 0.45 * (sigma_squared / (sigma_squared + 0.09));
+	vec3 v_proj = normalize(view_dir - normal * V);
+	vec3 l_proj = normalize(light_dir - normal * L);
+	vec3 l_brdf = COLOR.rgb / PI;
+	float alpha = max(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
+	float beta = min(acos(dot(view_dir, normal)), acos(dot(light_dir, normal)));
+	float proj_dot = max(0, dot(v_proj, l_proj));
+	float calc = sqrt((1.0 - pow(L, 2) * (1.0 - pow(V, 2)))) / max(L, V);
+	vec3 oren_nayar = l_brdf * (A + B * proj_dot * calc);
+
     // **Final color calculation**
     vec3 ambient_light = blurred_color * ambient_intensity;  // Ambient lighting
     vec3 specular_light = vec3(fresnel) * specular;         // Specular reflection
-    vec3 diffuse_light = (1.0 - fresnel) * (1.0 - metallic) * diffuse * blurred_color;  // Diffuse reflection
+    vec3 diffuse_light = (1.0 - fresnel) * (1.0 - metallic) * oren_nayar * blurred_color;  // Diffuse reflection
 
     vec3 final_color = ambient_light + specular_light + diffuse_light;
 
